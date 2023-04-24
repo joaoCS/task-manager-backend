@@ -4,7 +4,15 @@ import { TaskModel } from "../models/Tasks.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+    try {
+        const tasks = await TaskModel.find({}); // retorna todas as tasks
 
+        res.json(tasks);
+    }
+    catch(err) {
+        res.status(500);
+        res.json({ message: "Erro ao buscar tarefas!" });
+    }
 });
 
 router.post("/create", async (req, res) => {
