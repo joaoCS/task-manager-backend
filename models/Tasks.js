@@ -7,7 +7,17 @@ const TaskSchema = new mongoose.Schema({
     },
     descricao: {
         type: String
+    },
+
+    dataVencimento: {
+        type: Number,
+        required: true
+    },
+    concluded: {
+        type: Boolean,
+        
     }
+    
 });
 
 export const TaskModel = mongoose.model("tasks", TaskSchema);
