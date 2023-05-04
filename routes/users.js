@@ -1,8 +1,11 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 const router = express.Router();
+
+dotenv.config();
 
 import { UserModel } from "../models/Users.js";
 
@@ -68,11 +71,13 @@ router.post("/login", async (req, res) => {
         return res.json({ message: "Senha incorreta!" });
     }
 
-    const token = jwt.sign({  });
+    const token = jwt.sign({ id: user._id }, JWT_SECRET);
+
+    return res.json({ token, userId: user._id, username: user.username });
 });
 
 
-router.get("/username", async (req, res) => {
+router.get("/username", verifyToken, async (req, res) => {
 
     try {
         const user = await UserModel.findById(req.headers.userid);
