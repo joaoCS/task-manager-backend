@@ -98,7 +98,7 @@ router.get("/username", verifyToken, async (req, res) => {
 });
 
 
-router.get("/user/:id", async (req, res) => {
+router.get("/user/:id", verifyToken, async (req, res) => {
     const { id } = req.params;
 
 
@@ -129,7 +129,7 @@ router.get("/user/:id", async (req, res) => {
 
 
 
-router.put("/edit", async (req, res) => {
+router.put("/edit", verifyToken, async (req, res) => {
 
     const { email, username, _id } = req.body;
 
