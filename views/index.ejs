@@ -5,14 +5,75 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Tarefas</title>
+    <style>
+        body{
+            font-family: sans-serif;
+        }
+        .password-reset{
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            width: fit-content;
+            height: fit-content;
+
+            margin: auto;
+
+            background-color: rgb(43, 57, 185);
+
+            padding: 10px;
+
+            border-radius: 10px;
+
+        }
+
+        .password-reset h1{
+            color: yellowgreen;
+        }
+
+        .password-reset form {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .password-reset form label {
+            color: yellowgreen;
+            font-weight: bold;
+        }
+
+        .password-reset form input {
+            border-radius: 5px;
+            border: 1px solid rgb(43, 57, 185);
+            height: 30px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .password-reset form input[type=submit]{
+            background-color: yellowgreen;
+            color:rgb(43, 57, 185);
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .password-reset form input[type=submit]:hover {
+            background-color: rgb(166, 173, 240);
+        }
+
+    </style>
 </head>
 <body>
-
-    <h1><%= email %></h1>
-    <form action="" method="POST">
-        <label for="password">Nova senha:</label><br/>
-        <input name="password" id="password" type="password" placeholder="Insira a nova senha"/><br/>
-        <input type="submit" value="Enviar"/>
-    </form>
+    <div class="password-reset">
+        <h1><%= email %></h1>
+        <form action="" method="POST">
+            <label for="password">Nova senha:</label><br/>
+            <input name="password" id="password" type="password" placeholder="Insira a nova senha"/><br/>
+            <input type="submit" value="Enviar"/>
+        </form>
+    </div>
 </body>
 </html>

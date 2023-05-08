@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import nodemailer from  "nodemailer";
 
 const router = express.Router();
 
@@ -161,12 +162,11 @@ router.post("/forgot-password", async (req, res) => {
     const { email } = req.body;
 
     try {
-        const user = UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             res.status(500);
             return res.json({ message: "Email não cadastrado!" });
         }
-
         const secret = JWT_SECRET + user.password;
 
         const token = jwt.sign({ email: user.email, id: user._id }, secret, { expiresIn: "5m" });
@@ -193,7 +193,7 @@ router.post("/forgot-password", async (req, res) => {
 
         console.log(link);
 
-        res.end();
+        res.json({ message: "Confira seu email!" });
 
     }
     catch(err) {
@@ -205,7 +205,7 @@ router.post("/forgot-password", async (req, res) => {
 router.get("/reset-password/:id/:token", async (req, res) => {
     const { id, token } = req.params;
 
-    const user = UserModel.findOne({ _id: id });
+    const user = await UserModel.findOne({ _id: id });
 
     if (!user) {
         res.status(500);
@@ -215,8 +215,11 @@ router.get("/reset-password/:id/:token", async (req, res) => {
     const secret = JWT_SECRET + user.password;
 
     try {
+        
         const verify = jwt.verify(token, secret);
+
         res.render("index", { email: verify.email });
+
 
     }
     catch(err) {
@@ -230,7 +233,7 @@ router.post("/reset-password/:id/:token", async (req, res) => {
     const { id, token } = req.params;
     const { password } = req.body;
 
-    const user = UserModel.findOne({ _id: id });
+    const user = await UserModel.findOne({ _id: id });
 
     if (!user) {
         res.status(500);
@@ -256,12 +259,12 @@ router.post("/reset-password/:id/:token", async (req, res) => {
             }
         );
 
-        res.json({ message: "Senha atualizada com sucesso!" });
+        res.render("confirmPasswordReset", { email: verify.email });
 
     }
     catch(err) {
         res.status(500);
-        return res.json({ message: "Algo deu  errado!" });
+        res.render("errorPasswordReset");
     }
 
 });

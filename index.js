@@ -11,6 +11,8 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.set("view engine", "ejs");
 
 app.use("/tasks", taskRouter);
 app.use("/auth", userRouter);
