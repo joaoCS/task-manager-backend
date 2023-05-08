@@ -16,6 +16,11 @@ const TaskSchema = new mongoose.Schema({
     concluded: {
         type: Boolean,
         
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
     }
     
 });
