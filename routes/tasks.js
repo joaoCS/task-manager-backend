@@ -5,9 +5,10 @@ import { verifyToken } from "./users.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
+    const { userid } = req.headers;
     try {
-        const tasks = await TaskModel.find({}); // retorna todas as tasks
+        const tasks = await TaskModel.find({}).where("userId").equals(userid).exec(); // retorna todas as tasks
 
         res.json(tasks);
     }
@@ -19,6 +20,7 @@ router.get("/", async (req, res) => {
 
 router.post("/create", verifyToken, async (req, res) => {
     try {
+
         const task = new TaskModel(req.body);
 
         await task.save();
@@ -31,13 +33,19 @@ router.post("/create", verifyToken, async (req, res) => {
     }
 });
 
-router.post("/edit", verifyToken, async (req, res) => {
+router.put("/edit", verifyToken, async (req, res) => {
     const { userId, _id, titulo, descricao, dataVencimento, concluded } = req.body;
 
     const task = await TaskModel.findById(_id);
+    
     if(!task) {
         res.status(500);
         return res.json({ message: "Tarefa não existe!" });
+    }
+    
+    if(task.userId.toString() !== userId) {
+        res.status(403);
+        return res.json({ message: "Tarefa não pertence ao usuário!" });
     }
 
     const user = await UserModel.findById(userId);
