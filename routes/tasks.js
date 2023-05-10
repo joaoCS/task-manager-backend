@@ -72,4 +72,22 @@ router.put("/edit", verifyToken, async (req, res) => {
 
 });
 
+router.delete("/delete", verifyToken, async (req, res) => {
+    const { taskId } = req.body;
+
+    if(!taskId) {
+        res.status(500);
+        return res.json({ message: "Id da tarefa não fornecido!" });
+    }
+
+    try {
+        await TaskModel.deleteOne({ _id: taskId });
+        res.json({ message: "Tarefa removida!" });
+    } 
+    catch (err) {
+        res.status(500);
+        return res.json({ message: "Erro ao remover cliente!" });
+    }
+});
+
 export { router as taskRouter };
