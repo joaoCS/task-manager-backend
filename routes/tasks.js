@@ -90,4 +90,38 @@ router.delete("/delete", verifyToken, async (req, res) => {
     }
 });
 
+router.post("/concluded", verifyToken, async (req, res) => {
+    const { task, concluded, userId } = req.body;
+
+    const bdTask = await TaskModel.findById(task._id);
+    
+    if(!bdTask) {
+        res.status(500);
+        return res.json({ message: "Tarefa não existe!" });
+    }
+    
+    if(bdTask.userId.toString() !== userId) {
+        res.status(403);
+        return res.json({ message: "Tarefa não pertence ao usuário!" });
+    }
+
+    const user = await UserModel.findById(userId);
+    if(!user) {
+        res.status(401);
+        return res.json({ message: "Usuário não encontrado!" });
+    }
+
+    try{
+        bdTask.concluded = concluded;
+        bdTask.save();
+        if (concluded)
+            return res.json({ message: "Tarefa marcada como concluida." });
+        return res.json({ message: "Tarefa marcada como não concluida." });
+    }
+    catch(err) {
+        return res.json({ message: "Erro ao marcar tarefa como concluida!" });
+    }
+
+});
+
 export { router as taskRouter };
