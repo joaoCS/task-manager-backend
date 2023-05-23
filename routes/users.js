@@ -220,13 +220,11 @@ router.get("/reset-password/:id/:token", async (req, res) => {
 
         res.render("index", { email: verify.email });
 
-
     }
     catch(err) {
         res.status(500);
-        return res.json({ message: "Não verificado!" });
+        return res.render("notVerified");
     }
-
 });
 
 router.post("/reset-password/:id/:token", async (req, res) => {
