@@ -177,19 +177,19 @@ router.post("/forgot-password", async (req, res) => {
         var transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "a valid email address",
+                user: process.env.EMAIL,
                 pass: process.env.APP_KEY
             }
         });
 
         var mailOptions = {
-            from: "a valid email address",
+            from: process.env.EMAIL,
             to: email,
             subject: "Redefinição de senha",
             text: link
         };
 
-        //const response = await transporter.sendMail(mailOptions);
+        const response = await transporter.sendMail(mailOptions);
 
         console.log(link);
 
